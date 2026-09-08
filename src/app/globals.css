@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #f7f4ef;
-  --foreground: #0b1220;
+  --background: #f4f1ea;
+  --foreground: #10231c;
 }
 
 html {
@@ -16,24 +16,29 @@ body {
   background: var(--background);
 }
 
+::selection {
+  background: #134e4a;
+  color: #fff;
+}
+
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-ink-950 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-ink-800 disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-teal-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 disabled:opacity-50;
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-ink-900/10 bg-white px-4 py-2.5 text-sm font-semibold text-ink-900 shadow-sm transition hover:bg-sand;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-teal-900/15 bg-white px-5 py-2.5 text-sm font-semibold text-teal-950 shadow-sm transition hover:bg-teal-50 disabled:opacity-50;
   }
   .btn-accent {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-sage-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-sage-700 disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-500 disabled:opacity-50;
   }
   .input {
-    @apply w-full rounded-lg border border-ink-900/10 bg-white px-3 py-2.5 text-sm text-ink-900 outline-none ring-sage-500/30 placeholder:text-ink-600/50 focus:ring-2;
+    @apply w-full rounded-xl border border-teal-900/10 bg-white px-3.5 py-2.5 text-sm text-teal-950 outline-none ring-teal-700/20 placeholder:text-teal-900/40 focus:ring-2;
   }
   .label {
-    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-600;
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-teal-800/70;
   }
   .card {
-    @apply rounded-2xl border border-ink-900/10 bg-white shadow-card;
+    @apply rounded-2xl border border-teal-900/10 bg-white shadow-[0_12px_40px_rgba(16,35,28,0.06)];
   }
   .badge {
     @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold;
