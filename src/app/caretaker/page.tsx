@@ -12,21 +12,23 @@ export default function Tokens() {
 
   if (!org) return <p>No organisation on this staff account.</p>;
 
-  function issue() {
-    const code = Math.random().toString(36).slice(2, 8).toUpperCase();
-    patch((s) => {
-      s.tokens.push({
-        id: uid("tok"),
-        orgId: org.id,
-        propertyId: prop?.id || "",
-        code,
-        feePaid: true,
-        issuedBy: user!.id,
-        createdAt: nowIso(),
-        expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(),
-      });
+function issue() {
+  if (!org) return;
+
+  const code = Math.random().toString(36).slice(2, 8).toUpperCase();
+  patch((s) => {
+    s.tokens.push({
+      id: uid("tok"),
+      orgId: org.id,
+      propertyId: prop?.id || "",
+      code,
+      feePaid: true,
+      issuedBy: user!.id,
+      createdAt: nowIso(),
+      expiresAt: new Date(Date.now() + 7 * 86400000).toISOString(),
     });
-  }
+  });
+}
 
   return (
     <div>
