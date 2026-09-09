@@ -1,1 +1,0 @@
-self.__NEXT_FONT_MANIFEST='{"pages":{},"app":{"/workspaces/gida/gida/src/app/layout":["static/media/af4bf8399d1aacdf-s.p.woff2","static/media/9cf9c6e84ed13b5e-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}';
