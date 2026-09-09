@@ -2,10 +2,12 @@
 
 import { useAuth } from "@/lib/AuthContext";
 import { nowIso, uid } from "@/lib/ids";
+import { PageTitle, Pill, EmptyState, SectionCard, statusTone } from "@/components/DashShell";
+import { ClipboardList, Check, X } from "lucide-react";
 
 export default function AppsPage() {
   const { store, org, user, patch } = useAuth();
-  const apps = store.applications.filter((a) => a.orgId === org?.id);
+  const apps = [...store.applications.filter((a) => a.orgId === org?.id)].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
   if (!org) return null;
 
   function decide(id: string, ok: boolean) {
@@ -51,28 +53,36 @@ export default function AppsPage() {
 
   return (
     <div>
-      <h1 className="font-display text-3xl">Applications</h1>
-      <div className="mt-6 space-y-3">
-        {apps.length === 0 && <p className="text-sm text-ink-600">None yet.</p>}
-        {apps.map((a) => (
-          <div key={a.id} className="card p-4">
-            <p className="font-semibold">{a.applicantName}</p>
-            <p className="text-xs text-ink-600">
-              {a.status} · surety {a.suretyName || "—"}
-            </p>
-            {a.status !== "approved" && a.status !== "rejected" && (
-              <div className="mt-3 flex gap-2">
-                <button className="btn-accent" onClick={() => decide(a.id, true)}>
-                  Approve
-                </button>
-                <button className="btn-secondary" onClick={() => decide(a.id, false)}>
-                  Reject
-                </button>
+      <PageTitle kicker="Pipeline" title="Applications" subtitle={`${apps.length} total applications`} />
+      {apps.length === 0 ? (
+        <EmptyState icon={ClipboardList} title="No applications yet" description="Applications submitted by prospective tenants will appear here." />
+      ) : (
+        <div className="space-y-3">
+          {apps.map((a) => (
+            <SectionCard key={a.id}>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <p className="font-semibold text-teal-950">{a.applicantName}</p>
+                  <div className="mt-1 flex items-center gap-2">
+                    <Pill tone={statusTone(a.status)}>{a.status.replace(/_/g, " ")}</Pill>
+                    <span className="text-xs text-teal-800/70">surety {a.suretyName || "—"}</span>
+                  </div>
+                </div>
+                {a.status !== "approved" && a.status !== "rejected" && (
+                  <div className="flex gap-2">
+                    <button className="btn-accent" onClick={() => decide(a.id, true)}>
+                      <Check size={15} /> Approve
+                    </button>
+                    <button className="btn-secondary" onClick={() => decide(a.id, false)}>
+                      <X size={15} /> Reject
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        ))}
-      </div>
+            </SectionCard>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

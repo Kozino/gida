@@ -3,6 +3,8 @@
 import { FormEvent, useState } from "react";
 import { useAuth } from "@/lib/AuthContext";
 import { nowIso, uid } from "@/lib/ids";
+import { PageTitle, Pill, SectionCard, statusTone } from "@/components/DashShell";
+import { ShieldCheck } from "lucide-react";
 
 export default function Onboarding() {
   const { org, patch } = useAuth();
@@ -44,22 +46,32 @@ export default function Onboarding() {
   }
 
   return (
-    <div className="max-w-xl">
-      <h1 className="font-display text-3xl">KYC & listing lock</h1>
-      <p className="mt-2 text-sm text-ink-700">
-        Status: <strong className="capitalize">{org.verification}</strong>
-        {org.rejectionReason && <span> — {org.rejectionReason}</span>}
-      </p>
-      <form onSubmit={submit} className="card mt-6 space-y-3 p-6">
-        <input className="input" placeholder="NIN" value={nin} onChange={(e) => setNin(e.target.value)} />
-        <input className="input" placeholder="CAC / RC (if company)" value={cac} onChange={(e) => setCac(e.target.value)} />
-        <input className="input" placeholder="Bank name" value={bankName} onChange={(e) => setBankName(e.target.value)} />
-        <input className="input" placeholder="Account name" value={bankAccountName} onChange={(e) => setBankAccountName(e.target.value)} />
-        <input className="input" placeholder="Account number" value={bankAccountNumber} onChange={(e) => setBankAccountNumber(e.target.value)} />
-        <input className="input" placeholder="Official WhatsApp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
-        <input className="input" placeholder="Physical address" value={address} onChange={(e) => setAddress(e.target.value)} />
-        <button className="btn-primary">Submit for verification</button>
-      </form>
+    <div className="max-w-2xl">
+      <PageTitle
+        kicker="Trust & safety"
+        title="KYC & listing lock"
+        subtitle="You stay unlisted until Gida verifies your details — this protects tenants from fake lodges."
+        action={
+          <Pill tone={statusTone(org.verification)}>{org.verification.replace("_", " ")}</Pill>
+        }
+      />
+      {org.rejectionReason && (
+        <div className="mb-6 rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-900">
+          <strong>Reviewer note:</strong> {org.rejectionReason}
+        </div>
+      )}
+      <SectionCard title="Verification details" action={<ShieldCheck className="text-teal-700" size={18} />}>
+        <form onSubmit={submit} className="grid gap-3">
+          <input className="input" placeholder="NIN" value={nin} onChange={(e) => setNin(e.target.value)} />
+          <input className="input" placeholder="CAC / RC (if company)" value={cac} onChange={(e) => setCac(e.target.value)} />
+          <input className="input" placeholder="Bank name" value={bankName} onChange={(e) => setBankName(e.target.value)} />
+          <input className="input" placeholder="Account name" value={bankAccountName} onChange={(e) => setBankAccountName(e.target.value)} />
+          <input className="input" placeholder="Account number" value={bankAccountNumber} onChange={(e) => setBankAccountNumber(e.target.value)} />
+          <input className="input" placeholder="Official WhatsApp" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
+          <input className="input" placeholder="Physical address" value={address} onChange={(e) => setAddress(e.target.value)} />
+          <button className="btn-primary">Submit for verification</button>
+        </form>
+      </SectionCard>
     </div>
   );
 }

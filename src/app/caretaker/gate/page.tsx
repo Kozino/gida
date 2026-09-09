@@ -1,33 +1,51 @@
 "use client";
 
 import { useState } from "react";
+import { PageTitle, EmptyState, SectionCard } from "@/components/DashShell";
+import { ScrollText, UserCheck } from "lucide-react";
 
 export default function Gate() {
   const [log, setLog] = useState<{ who: string; at: string }[]>([]);
   const [who, setWho] = useState("");
+
+  function checkIn() {
+    if (!who) return;
+    setLog((l) => [{ who, at: new Date().toLocaleString() }, ...l]);
+    setWho("");
+  }
+
   return (
-    <div>
-      <h1 className="font-display text-3xl">Gate log</h1>
-      <div className="mt-4 flex gap-2">
-        <input className="input" placeholder="Visitor name" value={who} onChange={(e) => setWho(e.target.value)} />
-        <button
-          className="btn-primary"
-          onClick={() => {
-            if (!who) return;
-            setLog((l) => [{ who, at: new Date().toLocaleString() }, ...l]);
-            setWho("");
+    <div className="max-w-2xl">
+      <PageTitle kicker="Security" title="Gate log" subtitle="Track visitors in and out — kept for this session." />
+      <SectionCard>
+        <form
+          className="flex gap-2"
+          onSubmit={(e) => {
+            e.preventDefault();
+            checkIn();
           }}
         >
-          In
-        </button>
-      </div>
-      <ul className="mt-6 space-y-2 text-sm">
-        {log.map((x, i) => (
-          <li key={i} className="card p-3">
-            {x.who} · {x.at}
-          </li>
-        ))}
-      </ul>
+          <input className="input" placeholder="Visitor name" value={who} onChange={(e) => setWho(e.target.value)} />
+          <button className="btn-primary shrink-0">
+            <UserCheck size={15} /> Check in
+          </button>
+        </form>
+      </SectionCard>
+
+      <SectionCard title="Today's log" className="mt-6" padded={log.length === 0}>
+        {log.length === 0 ? (
+          <EmptyState icon={ScrollText} title="No visitors logged yet" />
+        ) : (
+          <div className="divide-y divide-teal-900/5">
+            {log.map((x, i) => (
+              <div key={i} className="list-row">
+                <p className="text-sm font-medium text-teal-950">{x.who}</p>
+                <p className="text-xs text-teal-800/70">{x.at}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </SectionCard>
     </div>
   );
 }

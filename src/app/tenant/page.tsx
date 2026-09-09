@@ -2,7 +2,9 @@
 
 import { useAuth } from "@/lib/AuthContext";
 import { formatMoney } from "@/lib/ids";
+import { PageTitle, Pill, EmptyState, SectionCard, statusTone } from "@/components/DashShell";
 import Link from "next/link";
+import { Home, Compass, ClipboardList } from "lucide-react";
 
 export default function TenantHome() {
   const { store, user } = useAuth();
@@ -13,38 +15,61 @@ export default function TenantHome() {
 
   return (
     <div>
-      <h1 className="font-display text-3xl">Hello, {user?.name}</h1>
+      <PageTitle kicker="Welcome" title={`Hello, ${user?.name}`} subtitle={ten ? "Here's where things stand with your tenancy." : undefined} />
+
       {ten ? (
-        <div className="card mt-6 p-6">
-          <p className="text-sm text-ink-600">{org?.name}</p>
-          <p className="font-semibold">
-            Room {room?.block} {room?.name}
-          </p>
-          <p className="mt-2 text-sm">
-            Tenancy {ten.startDate} → {ten.endDate}
-          </p>
-          <p className="text-sm">Rent on file: {formatMoney(ten.rent)}</p>
-          <p className="mt-2 text-xs text-ink-600">
+        <SectionCard>
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-teal-700">{org?.name}</p>
+              <p className="mt-1 font-display text-2xl text-teal-950">
+                Room {room?.block} {room?.name}
+              </p>
+              <p className="mt-2 text-sm text-teal-800">
+                Tenancy {ten.startDate} → {ten.endDate}
+              </p>
+            </div>
+            <Pill tone="emerald">Active tenancy</Pill>
+          </div>
+          <div className="mt-4 flex items-center justify-between border-t border-teal-900/10 pt-4">
+            <p className="text-sm text-teal-800">
+              Rent on file: <span className="font-semibold text-teal-950">{formatMoney(ten.rent)}</span>
+            </p>
+            <Link href="/tenant/pay" className="btn-secondary !py-2 text-sm">
+              Pay & receipts
+            </Link>
+          </div>
+          <p className="mt-3 text-xs text-teal-800/70">
             Pay only the account shown under Pay & receipts. Token account is different.
           </p>
-        </div>
+        </SectionCard>
       ) : (
-        <p className="mt-4 text-sm">
-          No active tenancy.{" "}
-          <Link className="underline" href="/browse">
-            Browse verified lodges
-          </Link>{" "}
-          and apply with a token.
-        </p>
+        <EmptyState
+          icon={Home}
+          title="No active tenancy"
+          description="Browse verified lodges and apply with a visit token from a caretaker."
+          action={
+            <Link className="btn-primary" href="/browse">
+              <Compass size={15} /> Browse verified lodges
+            </Link>
+          }
+        />
       )}
-      <h2 className="mt-8 font-semibold">Applications</h2>
-      <ul className="mt-2 space-y-2 text-sm">
-        {apps.map((a) => (
-          <li key={a.id} className="card p-3 capitalize">
-            {a.status}
-          </li>
-        ))}
-      </ul>
+
+      <SectionCard title="Applications" className="mt-8" padded={apps.length === 0}>
+        {apps.length === 0 ? (
+          <EmptyState icon={ClipboardList} title="No applications yet" description="Applications you submit will be tracked here." />
+        ) : (
+          <div className="divide-y divide-teal-900/5">
+            {apps.map((a) => (
+              <div key={a.id} className="list-row">
+                <p className="text-sm font-medium text-teal-950">{a.applicantName || "Application"}</p>
+                <Pill tone={statusTone(a.status)}>{a.status.replace(/_/g, " ")}</Pill>
+              </div>
+            ))}
+          </div>
+        )}
+      </SectionCard>
     </div>
   );
 }

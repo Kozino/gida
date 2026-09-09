@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Stat } from "@/components/Shell";
+import { StatCard, PageTitle, Pill } from "@/components/DashShell";
 import { useAuth } from "@/lib/AuthContext";
+import { DoorOpen, UserRound, ClipboardList, Radio, ShieldAlert } from "lucide-react";
 
 export default function OwnerHome() {
   const { store, org } = useAuth();
@@ -14,20 +15,31 @@ export default function OwnerHome() {
 
   return (
     <div>
-      <h1 className="font-display text-3xl">{org.name}</h1>
+      <PageTitle
+        kicker="Overview"
+        title={org.name}
+        subtitle={`${org.city}, ${org.state} · ${org.type}`}
+        action={<Pill tone={listed ? "emerald" : "amber"}>{listed ? "Live on Gida" : "Not listed"}</Pill>}
+      />
       {!listed && (
-        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm">
-          Your lodge is <strong>not listed</strong>. Complete KYC and wait for Gida verification.
-          <Link className="ml-2 font-semibold underline" href="/owner/onboarding">
+        <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-5">
+          <div className="flex items-start gap-3">
+            <ShieldAlert className="mt-0.5 shrink-0 text-amber-700" size={20} />
+            <div>
+              <p className="text-sm font-semibold text-amber-900">Your lodge is not listed yet</p>
+              <p className="text-sm text-amber-800/80">Complete KYC and wait for Gida verification to start receiving tenants.</p>
+            </div>
+          </div>
+          <Link className="btn-accent shrink-0" href="/owner/onboarding">
             Open KYC
           </Link>
         </div>
       )}
-      <div className="mt-6 grid gap-4 md:grid-cols-4">
-        <Stat label="Rooms" value={rooms.length} />
-        <Stat label="Active tenancies" value={tens.length} />
-        <Stat label="Applications" value={apps.length} />
-        <Stat label="Listing" value={listed ? "Live" : "Hidden"} />
+      <div className="grid gap-4 md:grid-cols-4">
+        <StatCard label="Rooms" value={rooms.length} icon={DoorOpen} />
+        <StatCard label="Active tenancies" value={tens.length} icon={UserRound} />
+        <StatCard label="Applications" value={apps.length} icon={ClipboardList} />
+        <StatCard label="Listing" value={listed ? "Live" : "Hidden"} icon={Radio} tone={listed ? "teal" : "amber"} />
       </div>
     </div>
   );
