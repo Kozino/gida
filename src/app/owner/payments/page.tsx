@@ -33,6 +33,7 @@ export default function PaymentsPage() {
                   patch((s) => {
                     const x = s.payments.find((y) => y.id === p.id);
                     if (x) x.status = "confirmed";
+                    if (!org) return;
                     s.audit.push({
                       id: uid("aud"),
                       orgId: org.id,

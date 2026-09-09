@@ -16,6 +16,7 @@ export default function StaffPage() {
 
   function add(e: FormEvent) {
     e.preventDefault();
+    if (!org) return;
     patch((s) => {
       s.users.push({
         id: uid("usr"),

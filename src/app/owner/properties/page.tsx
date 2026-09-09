@@ -25,6 +25,7 @@ export default function PropertiesPage() {
 
   function add(e: FormEvent) {
     e.preventDefault();
+    if (!org) return;
     patch((s) => {
       s.properties.push({
         id: uid("prop"),

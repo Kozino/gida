@@ -18,7 +18,7 @@ export default function RoomsPage() {
 
   function add(e: FormEvent) {
     e.preventDefault();
-    if (!propertyId) return;
+    if (!org || !propertyId) return;
     patch((s) => {
       s.rooms.push({
         id: uid("rm"),

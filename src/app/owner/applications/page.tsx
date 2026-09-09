@@ -9,6 +9,7 @@ export default function AppsPage() {
   if (!org) return null;
 
   function decide(id: string, ok: boolean) {
+    if (!org) return;
     patch((s) => {
       const a = s.applications.find((x) => x.id === id);
       if (!a) return;

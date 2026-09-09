@@ -18,6 +18,7 @@ export default function Onboarding() {
 
   function submit(e: FormEvent) {
     e.preventDefault();
+    if (!org) return;
     patch((s) => {
       const o = s.orgs.find((x) => x.id === org.id);
       if (!o) return;

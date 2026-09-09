@@ -16,7 +16,7 @@ export default function Settings() {
         defaultValue={org.notes || "Honesty policy: false information may end tenancy. Forfeiture of caution or a share of rent only where lodge policy and applicable state law allow."}
         onBlur={(e) =>
           patch((s) => {
-            const o = s.orgs.find((x) => x.id === org.id);
+            const o = s.orgs.find((x) => x.id === org?.id);
             if (o) o.notes = e.target.value;
           })
         }
